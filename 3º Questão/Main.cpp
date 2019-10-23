@@ -8,8 +8,6 @@ int main (void){
 
   printf("Informe as quantidades de cidades: ");
   scanf("%d", &QtdCidades);
-  printf("Informe o valor dos pedagios: ");
-  scanf("%f", &precoPedagios);
   printf("Informe o valor maximo a ser pago com pedagios: ");
   scanf("%f", &valorPedagio_Pai);
 
@@ -26,7 +24,7 @@ int main (void){
         setbuf(stdin, NULL);
         scanf("%[^\n]s", NomeCidade);
         if (existeVertice(gr, NomeCidade, &Aux)){
-          buscaProfundidade_Grafo(gr, Aux, valorPedagio_Pai, precoPedagios);
+          buscaProfundidade_Grafo(gr, Aux, valorPedagio_Pai);
         }else{
           printf("Essa cidade nao existe no grafo!\n");
         }
@@ -35,24 +33,18 @@ int main (void){
         escolhaRefazer = Menu(2);
         switch (escolhaRefazer) {
           case 1:
-            printf("Informe o valor dos pedagios: ");
-            scanf("%f", &precoPedagios);
-            break;
-          case 2:
             printf("Informe o valor maximo a ser pago com pedagios: ");
             scanf("%f", &valorPedagio_Pai);
             break;
-          case 3:
+          case 2:
             libera_Grafo(gr);
             gr = NULL;
             printf("Informe as quantidades de cidades: ");
             scanf("%d", &QtdCidades);
-            printf("Informe o valor dos pedagios: ");
-            scanf("%f", &precoPedagios);
             printf("Informe o valor maximo a ser pago com pedagios: ");
             scanf("%f", &valorPedagio_Pai);
             gr = cria_Grafo(QtdCidades, QtdCidades * QtdCidades, 1);
-            break;
+            break;            
         }
         break;
       case 4:

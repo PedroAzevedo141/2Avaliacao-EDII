@@ -23,5 +23,6 @@ int inserirVertice(Grafo *gr);
 int existeVertice(Grafo *gr, char *Cidade, int *Pos);
 int inserirAresta(Grafo *gr, int orig, int dest, int eh_Digrafo, float peso);
 void buscaProfundidade(Grafo *gr, int ini, int *visitado, int cont);
-void buscaProfundidade_Grafo(Grafo *gr, int ini, float precoTotal, float precoPedagio);
-void imprimirCidade(Grafo *gr, int ini, float precoTotal, float precoPedagio);
+void buscaProfundidade_Grafo(Grafo *gr, int ini, float precoTotal);
+void imprimirCidade(Grafo *gr, int ini, float precoTotal);
+float pesoAresta(Grafo *gr, char *Cidade1, char *Cidade2);

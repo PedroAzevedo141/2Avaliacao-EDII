@@ -17,9 +17,8 @@ int Menu(int x){
   }else if (x == 2){
     system("clear");
     printf("-=-=- MENU -=-=-\n"
-    "1 - Modificar o valor do pedagio.\n"
-    "2 - Modificar o valor total a ser pago com pegadios.\n"
-    "3 - Refazer o grafo.\n"
+    "1 - Modificar o valor total a ser pago com pegadios.\n"
+    "2 - Refazer o grafo.\n"
     ">>> ");
     scanf("%d", &Aux);
     return Aux;
@@ -104,6 +103,7 @@ int existeVertice(Grafo *gr, char *Cidade, int *Pos){
 int inserirVertice(Grafo *gr){
   if (gr->QtdVertice <= gr->nro_Vertice){
     int Aux[2], Existente = 0, Pos1, Pos2, Key;
+    float precoPedagio;
     char cidadeOrigem[100], cidadeDestino[100];
     printf("Informe o nome da cidade de origem: ");
     setbuf(stdin, NULL);
@@ -111,6 +111,8 @@ int inserirVertice(Grafo *gr){
     printf("Informe o nome da cidade de destino: ");
     setbuf(stdin, NULL);
     scanf("%[^\n]s", cidadeDestino);
+    printf("Informe o valor dos pedagios: ");
+    scanf("%f", &precoPedagio);
     Key = existeVertice(gr, cidadeOrigem, &Pos1);
     if(Key == -1){
       printf("Quantidade maxima de cidades atingida!\n");
@@ -137,7 +139,7 @@ int inserirVertice(Grafo *gr){
         return 0;
       }
     }
-    return inserirAresta(gr, Pos1, Pos2, 1, 0);
+    return inserirAresta(gr, Pos1, Pos2, 1, precoPedagio);
   }else{
     printf("Quantidades maxima de cidades atingida!\n");
     return 0;
@@ -157,6 +159,7 @@ int inserirAresta(Grafo *gr, int orig, int dest, int eh_Digrafo, float peso){
   gr->arestas[orig][gr->Grau[orig]] = dest;
   if (gr->eh_Ponderado){
     gr->pesos[orig][gr->Grau[orig]] = peso;
+    printf("%d - %d\n", orig, gr->Grau[orig]);
   }
   gr->Grau[orig]++;
 
@@ -164,6 +167,19 @@ int inserirAresta(Grafo *gr, int orig, int dest, int eh_Digrafo, float peso){
     inserirAresta(gr, dest, orig, 1, peso);
   }
   return 1;
+}
+
+float pesoAresta(Grafo *gr, char *Cidade1, char *Cidade2){
+  int i, pos1, pos2;
+  if (existeVertice(gr, Cidade1, &pos1)){
+    if (existeVertice(gr, Cidade2, &pos2)){
+      for (i = 0; i < gr->Grau[pos1]; i++){
+        if (gr->arestas[pos1][i] == pos2){
+          return gr->pesos[pos1][i];
+        }
+      }
+    }
+  }
 }
 
 void guardaOcorrecia(int x){
@@ -183,24 +199,27 @@ void buscaProfundidade(Grafo *gr, int ini, int *visitado, int cont){
   }
 }
 
-void buscaProfundidade_Grafo(Grafo *gr, int ini, float precoTotal, float precoPedagio){
+void buscaProfundidade_Grafo(Grafo *gr, int ini, float precoTotal){
   int i, cont = 1, visitado[gr->nro_Vertice];
   for (i = 0; i < gr->nro_Vertice; i++){
     visitado[i] = 0;
   }
   buscaProfundidade(gr, ini, visitado, cont);
-  imprimirCidade(gr, ini, precoTotal, precoPedagio);
+  imprimirCidade(gr, ini, precoTotal);
 }
 
-void imprimirCidade(Grafo *gr, int ini, float precoTotal, float precoPedagio){
+void imprimirCidade(Grafo *gr, int ini, float precoTotal){
+  char stringAux[100];
   float Aux = 0;
   printf("Cidades a serem vizitadas:\n");
   printf("Saindo de %s\n", gr->nomeVertice[ini]);
+  strcpy(stringAux, gr->nomeVertice[ini]);
   for (int x = gr->nro_Vertice - 2; x >= 0; x--){
-    Aux += precoPedagio;
-    if (precoTotal >= Aux){
+    Aux += pesoAresta(gr, stringAux, gr->nomeVertice[gCidades[x]]);
+    if (Aux <= precoTotal){
       printf("-- %s\n", gr->nomeVertice[gCidades[x]]);
     }
+    strcpy(stringAux, gr->nomeVertice[gCidades[x]]);
   }
   gCount = 0;
 }
