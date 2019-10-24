@@ -34,7 +34,7 @@ Grafo * cria_Grafo (int nro_Vertice, int grau_Max, int ehPonderado){
     gr->eh_Ponderado = (ehPonderado != 0) ? 1 : 0;
     gCidades = (int*)malloc(nro_Vertice * sizeof(int));
     gr->Grau = (int*)calloc(nro_Vertice, sizeof(int));
-    gr->Visitada = (int*)calloc(nro_Vertice, sizeof(int));
+    // gr->Visitada = (int*)calloc(nro_Vertice, sizeof(int));
     gr->nomeVertice = (char**)malloc(nro_Vertice * sizeof(char*));
     for (i = 0; i < nro_Vertice; i++){
       gr->nomeVertice[i] = (char*)malloc(100 * sizeof(char));

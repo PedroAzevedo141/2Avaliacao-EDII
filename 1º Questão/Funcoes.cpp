@@ -11,6 +11,7 @@ Grafo * cria_Grafo (int nro_Vertice, int grau_Max, int ehPonderado){
     gr->grau_Max = grau_Max;
     gr->eh_Ponderado = (ehPonderado != 0) ? 1 : 0;
     gr->Grau = (int*)calloc(nro_Vertice, sizeof(int));
+    gr->nomeVertice = (int*)calloc(nro_Vertice, sizeof(int));
     gr->arestas = (int**)malloc(nro_Vertice * sizeof(int*));
     for(i = 0; i < nro_Vertice; i++){
       gr->arestas[i] = (int*)malloc(grau_Max * sizeof(int));
@@ -21,6 +22,7 @@ Grafo * cria_Grafo (int nro_Vertice, int grau_Max, int ehPonderado){
         gr->pesos[i] = (float*)malloc(grau_Max * sizeof(float));
       }
     }
+    gr->QtdVertice = 0;
   }
   return gr;
 }
@@ -44,55 +46,51 @@ void libera_Grafo(Grafo* gr){
   }
 }
 
-int inserirAresta(Grafo *gr, int orig, int dest, int eh_Digrafo, float peso){
-  if (gr == NULL){
-    return 0;
+int existeVertice(Grafo *gr, int Numero, int *posicao){
+  int i;
+  for (i = 0; i < gr->QtdVertice; i++){
+    if (gr->nomeVertice[i] == Numero){
+      *posicao = i;
+      return 1;
+    }
   }
-  if (orig < 0 || orig >= gr->nro_Vertice){
-    return 0;
-  }
-  if (dest < 0 || dest >= gr->nro_Vertice){
-    return 0;
-  }
-
-  gr->arestas[orig][gr->Grau[orig]] = dest;
-  if (gr->eh_Ponderado){
-    gr->pesos[orig][gr->Grau[orig]] = peso;
-  }
-  gr->Grau[orig]++;
-
-  if (!eh_Digrafo){
-    inserirAresta(gr, dest, orig, 1, peso);
-  }
-  return 1;
+  gr->nomeVertice[i] = Numero;
+  *posicao = i;
+  return 0;
 }
 
-int removeAresta(Grafo* gr, int orig, int dest, int eh_Digrafo){
+int inserirAresta(Grafo *gr, int orig, int dest, int eh_Digrafo){
   if (gr == NULL){
     return 0;
   }
-  if (orig < 0 || orig >= gr->nro_Vertice){
+
+  int Key = 0, pOrig, pDest;
+  Key = existeVertice(gr, orig, &pOrig);
+  if (!Key){
+    gr->QtdVertice++;
+  }
+  Key = existeVertice(gr, dest, &pDest);
+  if (!Key){
+    gr->QtdVertice++;
+  }
+  printf("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-\n");
+  printf("Origem: %d \t\t--\tDestino: %d\nPosicao Origem: %d \t--\tPosicao Destino: %d\n", orig, dest, pOrig, pDest);
+  printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-\n");
+
+  if (pOrig < 0 || pOrig >= gr->nro_Vertice){
     return 0;
   }
-  if (dest < 0 || dest >= gr->nro_Vertice){
+  if (pDest < 0 || pDest >= gr->nro_Vertice){
     return 0;
   }
 
-  int i = 0;
-  while (i < gr->Grau[orig] && gr->arestas[orig][i] != dest){
-    i++;
-  }
-  if (i == gr->Grau[orig]){
-    return 0;
-  }
-  gr->Grau[orig]--;
-  gr->arestas[orig][i] = gr->arestas[orig][gr->Grau[orig]];
-  if (gr->eh_Ponderado){
-    gr->pesos[orig][i] = gr->pesos[orig][gr->Grau[orig]];
-  }
+  gr->arestas[pOrig][gr->Grau[pOrig]] = pDest;
+  gr->Grau[pOrig]++;
+
   if (!eh_Digrafo){
-    removeAresta(gr, dest, orig, 1);
+    inserirAresta(gr, dest, orig, 1);
   }
+
   return 1;
 }
 
