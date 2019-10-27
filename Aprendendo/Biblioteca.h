@@ -16,3 +16,6 @@ int removeAresta(Grafo* gr, int orig, int dest, int eh_Digrafo);
 void buscaProfundidade(Grafo *gr, int ini, int *visitado, int cont);
 void buscaProfundidade_Grafo(Grafo *gr, int ini, int *visitado);
 void buscaLargura_Grafo(Grafo *gr, int ini, int *visitado);
+
+int procuraMenorDistancia(float *dist, int *visitado, int NV);
+void menorCaminho_Grafo(Grafo *gr, int ini, int *ant, float *dist);

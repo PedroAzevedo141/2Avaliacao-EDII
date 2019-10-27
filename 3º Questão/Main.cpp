@@ -13,7 +13,7 @@ int main (void){
 
   gr = cria_Grafo(QtdCidades, QtdCidades * QtdCidades, 1);
 
-  while(true){
+  while(1){
     escolhaMenu = Menu(1);
     switch (escolhaMenu) {
       case 1:
@@ -44,7 +44,7 @@ int main (void){
             printf("Informe o valor maximo a ser pago com pedagios: ");
             scanf("%f", &valorPedagio_Pai);
             gr = cria_Grafo(QtdCidades, QtdCidades * QtdCidades, 1);
-            break;            
+            break;
         }
         break;
       case 4:

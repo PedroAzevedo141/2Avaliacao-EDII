@@ -139,7 +139,7 @@ int inserirVertice(Grafo *gr){
         return 0;
       }
     }
-    return inserirAresta(gr, Pos1, Pos2, 1, precoPedagio);
+    return inserirAresta(gr, Pos1, Pos2, 0, precoPedagio);
   }else{
     printf("Quantidades maxima de cidades atingida!\n");
     return 0;
@@ -159,12 +159,13 @@ int inserirAresta(Grafo *gr, int orig, int dest, int eh_Digrafo, float peso){
   gr->arestas[orig][gr->Grau[orig]] = dest;
   if (gr->eh_Ponderado){
     gr->pesos[orig][gr->Grau[orig]] = peso;
-    printf("%d - %d\n", orig, gr->Grau[orig]);
   }
   gr->Grau[orig]++;
+  printf("%d - %d\n", orig, gr->Grau[orig]);
 
   if (!eh_Digrafo){
     inserirAresta(gr, dest, orig, 1, peso);
+    printf("Entrei na recursao!\n");
   }
   return 1;
 }
@@ -216,6 +217,7 @@ void imprimirCidade(Grafo *gr, int ini, float precoTotal){
   strcpy(stringAux, gr->nomeVertice[ini]);
   for (int x = gr->nro_Vertice - 2; x >= 0; x--){
     Aux += pesoAresta(gr, stringAux, gr->nomeVertice[gCidades[x]]);
+    printf("Aux: %f   --  precoTotal: %f  --  stringAux: %s  --  gr->nomeVertice[gCidades[x]]: %s!!\n", Aux, precoTotal, stringAux, gr->nomeVertice[gCidades[x]]);
     if (Aux <= precoTotal){
       printf("-- %s\n", gr->nomeVertice[gCidades[x]]);
     }

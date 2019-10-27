@@ -1,4 +1,4 @@
-#include "Funcoes.cpp"
+#include "Funcoes.c"
 
 int main (void){
 
@@ -129,22 +129,37 @@ int main (void){
   inserirAresta(gr, 1233, 2233, 0);
   inserirAresta(gr, 1112, 1113, 0);
 
+  int ant[81], Config, posicao, x = 0, n1 = 0, n2;
+  float dist[81];
 
-
-
-
-
-  int Vis[81];
-
-  buscaProfundidade_Grafo(gr, 0, Vis);
-
-  // buscaLargura_Grafo(gr, 0, Vis);
-
-  for (int x = 0; x < 81; x++){
-    printf("%d ->> %d\n", x, Vis[x]);
+  printf("Informe a configuracao atual:\n>>> ");
+  scanf("%d", &Config);
+  if (existeVertice(gr, Config, &posicao, 2)){
+    menorCaminho_Grafo(gr, posicao, ant, dist);
+    // for (int i = 0; i < 81; i++){
+    //   printf("%d --> ant: %d --||-- dist: %.2f\n", i, ant[i], dist[i]);
+    // }
+    if (dist[54] < dist[73]){
+      x = 54;
+    }else{
+      x = 73;
+    }
+    n2 = x;
+    n1 = (int)dist[x];
+    int Aux[n1 + 1];
+    for (int i = 0; i < n1; i++){
+      x = ant[x];
+      Aux[i] = x;
+    }
+    printf("Melhor Caminho:\n");
+    for (int i = n1 - 1; i >= 0; i--){
+      printf(">>> %d\n", gr->nomeVertice[Aux[i]]);
+    }
+    printf(">>> %d\n", gr->nomeVertice[n2]);
+  }else{
+    printf("Error: Configuracao Incorreta!!\n");
   }
 
   libera_Grafo(gr);
-  printf("PEGOU!!\n");
   return 0;
 }
