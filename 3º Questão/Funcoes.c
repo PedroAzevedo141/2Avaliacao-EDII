@@ -34,7 +34,6 @@ Grafo * cria_Grafo (int nro_Vertice, int grau_Max, int ehPonderado){
     gr->eh_Ponderado = (ehPonderado != 0) ? 1 : 0;
     gCidades = (int*)malloc(nro_Vertice * sizeof(int));
     gr->Grau = (int*)calloc(nro_Vertice, sizeof(int));
-    // gr->Visitada = (int*)calloc(nro_Vertice, sizeof(int));
     gr->nomeVertice = (char**)malloc(nro_Vertice * sizeof(char*));
     for (i = 0; i < nro_Vertice; i++){
       gr->nomeVertice[i] = (char*)malloc(100 * sizeof(char));
@@ -161,11 +160,9 @@ int inserirAresta(Grafo *gr, int orig, int dest, int eh_Digrafo, float peso){
     gr->pesos[orig][gr->Grau[orig]] = peso;
   }
   gr->Grau[orig]++;
-  printf("%d - %d\n", orig, gr->Grau[orig]);
 
   if (!eh_Digrafo){
     inserirAresta(gr, dest, orig, 1, peso);
-    printf("Entrei na recursao!\n");
   }
   return 1;
 }
@@ -179,6 +176,7 @@ float pesoAresta(Grafo *gr, char *Cidade1, char *Cidade2){
           return gr->pesos[pos1][i];
         }
       }
+      return -1;
     }
   }
 }
@@ -194,7 +192,6 @@ void buscaProfundidade(Grafo *gr, int ini, int *visitado, int cont){
   for (i = 0; i < gr->Grau[ini]; i++){
     if (!visitado[gr->arestas[ini][i]]){
       buscaProfundidade(gr, gr->arestas[ini][i], visitado, cont + 1);
-      // printf("--> %s\n", gr->nomeVertice[gr->arestas[ini][i]]);
       guardaOcorrecia(gr->arestas[ini][i]);
     }
   }
@@ -211,17 +208,22 @@ void buscaProfundidade_Grafo(Grafo *gr, int ini, float precoTotal){
 
 void imprimirCidade(Grafo *gr, int ini, float precoTotal){
   char stringAux[100];
-  float Aux = 0;
+  float Aux = 0, Aux2;
   printf("Cidades a serem vizitadas:\n");
   printf("Saindo de %s\n", gr->nomeVertice[ini]);
   strcpy(stringAux, gr->nomeVertice[ini]);
   for (int x = gr->nro_Vertice - 2; x >= 0; x--){
-    Aux += pesoAresta(gr, stringAux, gr->nomeVertice[gCidades[x]]);
-    printf("Aux: %f   --  precoTotal: %f  --  stringAux: %s  --  gr->nomeVertice[gCidades[x]]: %s!!\n", Aux, precoTotal, stringAux, gr->nomeVertice[gCidades[x]]);
-    if (Aux <= precoTotal){
-      printf("-- %s\n", gr->nomeVertice[gCidades[x]]);
+    Aux2 = pesoAresta(gr, stringAux, gr->nomeVertice[gCidades[x]]);
+    if (Aux2 != -1){
+      Aux += pesoAresta(gr, stringAux, gr->nomeVertice[gCidades[x]]);
+      if (Aux <= precoTotal){
+        printf("-- %s\n", gr->nomeVertice[gCidades[x]]);
+      }
+      Aux2 = pesoAresta(gr, gr->nomeVertice[gCidades[x]], gr->nomeVertice[gCidades[x - 1]]);
+      if (Aux2 != -1){
+        strcpy(stringAux, gr->nomeVertice[gCidades[x]]);
+      }
     }
-    strcpy(stringAux, gr->nomeVertice[gCidades[x]]);
   }
   gCount = 0;
 }

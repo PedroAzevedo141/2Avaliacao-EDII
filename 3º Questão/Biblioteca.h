@@ -7,7 +7,6 @@ struct grafo{
   int * Grau;
   char **nomeVertice;
   int QtdVertice;
-  // int * Visitada;
 };
 
 typedef struct grafo Grafo;

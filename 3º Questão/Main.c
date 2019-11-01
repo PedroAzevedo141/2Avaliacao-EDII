@@ -1,4 +1,4 @@
-#include "Funcoes.cpp"
+#include "Funcoes.c"
 
 int main (void){
   Grafo *gr;
