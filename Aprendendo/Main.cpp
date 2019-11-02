@@ -13,16 +13,17 @@ int main (void){
 
   int ant[5];
   float dist[5];
+  int Vis[5];
   // float Aux = 0;
 
   // buscaProfundidade_Grafo(gr, 0, Vis, &Aux);
 
-  // buscaLargura_Grafo(gr, 0, Vis);
+  buscaLargura_Grafo(gr, 0, Vis);
 
-  menorCaminho_Grafo(gr, 0, ant, dist);
+  // menorCaminho_Grafo(gr, 0, ant, dist);
 
   for (int x = 0; x < 5; x++){
-    printf("--> ant: %d --||-- dist: %.2f\n", ant[x], dist[x]);
+    printf("dist: %d\n", Vis[x]);
   }
 
   // printf("--> %f\n", Aux);
